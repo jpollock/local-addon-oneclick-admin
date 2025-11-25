@@ -34,19 +34,20 @@ function isValidWPUserArray(users: unknown): users is WPUser[] {
     (user) =>
       typeof user === 'object' &&
       user !== null &&
-      typeof user.ID === 'string' &&
+      // ID can be string or number depending on WP-CLI version/platform
+      (typeof user.ID === 'string' || typeof user.ID === 'number') &&
       typeof user.user_login === 'string'
   );
 }
 
 /**
- * Parses a user ID string to a number, with validation.
+ * Parses a user ID (string or number) to a validated number.
  *
- * @param idString - The ID string to parse
+ * @param idValue - The ID value to parse (string or number)
  * @returns The parsed number, or null if invalid
  */
-function parseUserId(idString: string): number | null {
-  const id = parseInt(idString, 10);
+function parseUserId(idValue: string | number): number | null {
+  const id = typeof idValue === 'number' ? idValue : parseInt(idValue, 10);
   if (isNaN(id) || id <= 0) {
     return null;
   }

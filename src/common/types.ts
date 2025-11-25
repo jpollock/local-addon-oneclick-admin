@@ -63,10 +63,11 @@ export interface LocalServices {
 }
 
 /**
- * WordPress user structure from WP-CLI user list
+ * WordPress user structure from WP-CLI user list.
+ * Note: ID can be string or number depending on WP-CLI version/platform.
  */
 export interface WPUser {
-  ID: string;
+  ID: string | number;
   user_login: string;
   display_name: string;
   user_email: string;
