@@ -4,6 +4,8 @@
 
 Auto One-Click Admin saves you time by automatically configuring one-click admin access for every new WordPress site you create in Local. Instead of manually selecting an admin user for one-click login, the addon does it for you.
 
+![Demo of Auto One-Click Admin](assets/one-click-admin.gif)
+
 ## Installation
 
 ### For Development (with symlink)

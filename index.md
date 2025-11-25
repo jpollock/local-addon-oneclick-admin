@@ -9,6 +9,8 @@ title: Home
 
 A Local addon that automatically enables one-click admin for all new sites by selecting the first administrator user.
 
+![Demo of Auto One-Click Admin](docs/assets/one-click-admin.gif)
+
 ## Features
 
 - **Automatic Configuration**: Configures one-click admin when creating new sites
