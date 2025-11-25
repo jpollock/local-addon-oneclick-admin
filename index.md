@@ -5,6 +5,8 @@ title: Home
 
 # Auto One-Click Admin
 
+![Beta](https://img.shields.io/badge/status-beta-orange) ![License](https://img.shields.io/badge/license-MIT-blue) ![Local](https://img.shields.io/badge/Local-v9.0%2B-green)
+
 A Local addon that automatically enables one-click admin for all new sites by selecting the first administrator user.
 
 ## Features
@@ -49,6 +51,13 @@ npm run install-addon
 
 - Local v9.0.0 or higher
 - Sites must have at least one WordPress administrator user
+
+## Feedback & Issues
+
+This addon is currently in **beta**. We welcome your feedback!
+
+- **Report bugs or request features**: [GitHub Issues](https://github.com/jpollock/local-addon-oneclick-admin/issues)
+- **View source code**: [GitHub Repository](https://github.com/jpollock/local-addon-oneclick-admin)
 
 ## License
 

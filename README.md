@@ -1,6 +1,9 @@
 # Auto One-Click Admin
 
 [![CI](https://github.com/jpollock/local-addon-oneclick-admin/actions/workflows/ci.yml/badge.svg)](https://github.com/jpollock/local-addon-oneclick-admin/actions/workflows/ci.yml)
+![Beta](https://img.shields.io/badge/status-beta-orange)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Local](https://img.shields.io/badge/Local-v9.0%2B-green)
 
 A Local addon that automatically enables one-click admin for all new sites by selecting the first administrator user.
 
@@ -133,6 +136,12 @@ local-addon-oneclick-admin/
 - [User Guide](docs/USER_GUIDE.md) - End-user documentation
 - [Developer Guide](docs/DEVELOPER_GUIDE.md) - Technical documentation for contributors
 - [Troubleshooting](docs/TROUBLESHOOTING.md) - Common issues and solutions
+
+## Feedback & Issues
+
+This addon is currently in **beta**. We welcome your feedback!
+
+- **Report bugs or request features**: [Open an issue](https://github.com/jpollock/local-addon-oneclick-admin/issues)
 
 ## Contributing
 
