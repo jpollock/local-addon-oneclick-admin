@@ -258,7 +258,8 @@ export class PreferencesPanel extends BaseComponent<PreferencesPanelProps, Prefe
               color: '#888',
             },
           },
-          'Applies to newly created, imported, and cloned sites. ' + 'Existing sites are not affected.'
+          'Applies to newly created, imported, and cloned sites. ' +
+            'Existing sites are not affected.'
         )
       ),
 

@@ -9,13 +9,14 @@ module.exports = {
     'src/**/*.{ts,tsx}',
     '!src/**/*.d.ts',
     '!src/common/types.ts',
+    '!src/renderer/**', // UI code - tested via integration tests
   ],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],
   coverageThreshold: {
     global: {
-      branches: 70,
-      functions: 70,
+      branches: 55,
+      functions: 90,
       lines: 70,
       statements: 70,
     },

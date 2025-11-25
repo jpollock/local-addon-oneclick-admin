@@ -90,63 +90,58 @@ export default function (context: ComponentContext): void {
     // When received, evict Apollo cache and trigger refetch
     const electron = getElectron(context);
     if (electron?.ipcRenderer?.on) {
-      electron.ipcRenderer.on(
-        IPC_CHANNELS.CONFIGURED,
-        (_event: unknown, ...args: unknown[]) => {
-          const data = args[0] as ConfiguredEventData;
+      electron.ipcRenderer.on(IPC_CHANNELS.CONFIGURED, (_event: unknown, ...args: unknown[]) => {
+        const data = args[0] as ConfiguredEventData;
+        // eslint-disable-next-line no-console
+        console.log(
+          `[${ADDON_NAME}] Received CONFIGURED event for site "${data.siteName}" (${data.siteId})`
+        );
+
+        const currentHash = window.location.hash;
+        const isViewingSite = currentHash.includes(data.siteId);
+
+        // Try to find Apollo Client and evict cache
+        // ALWAYS evict cache regardless of current view - ensures fresh data when user navigates to site
+        const apolloClient = findApolloClient();
+
+        if (apolloClient?.cache) {
           // eslint-disable-next-line no-console
           console.log(
-            `[${ADDON_NAME}] Received CONFIGURED event for site "${data.siteName}" (${data.siteId})`
+            `[${ADDON_NAME}] Found Apollo client, evicting cache for site ${data.siteId}...`
           );
 
-          const currentHash = window.location.hash;
-          const isViewingSite = currentHash.includes(data.siteId);
+          try {
+            // Evict the specific site query from cache
+            apolloClient.cache.evict({
+              id: 'ROOT_QUERY',
+              fieldName: 'site',
+              args: { id: data.siteId },
+            });
 
-          // Try to find Apollo Client and evict cache
-          // ALWAYS evict cache regardless of current view - ensures fresh data when user navigates to site
-          const apolloClient = findApolloClient();
+            // Garbage collect orphaned references
+            apolloClient.cache.gc();
 
-          if (apolloClient?.cache) {
-            // eslint-disable-next-line no-console
-            console.log(
-              `[${ADDON_NAME}] Found Apollo client, evicting cache for site ${data.siteId}...`
-            );
-
-            try {
-              // Evict the specific site query from cache
-              apolloClient.cache.evict({
-                id: 'ROOT_QUERY',
-                fieldName: 'site',
-                args: { id: data.siteId },
+            // Only refetch active queries if user is currently viewing this site
+            // If not viewing, the cache eviction alone ensures fresh data when they navigate there
+            if (isViewingSite) {
+              apolloClient.refetchQueries({
+                include: 'active',
               });
-
-              // Garbage collect orphaned references
-              apolloClient.cache.gc();
-
-              // Only refetch active queries if user is currently viewing this site
-              // If not viewing, the cache eviction alone ensures fresh data when they navigate there
-              if (isViewingSite) {
-                apolloClient.refetchQueries({
-                  include: 'active',
-                });
-                // eslint-disable-next-line no-console
-                console.log(
-                  `[${ADDON_NAME}] User viewing site - cache evicted and refetch triggered`
-                );
-              } else {
-                // eslint-disable-next-line no-console
-                console.log(
-                  `[${ADDON_NAME}] User not viewing site - cache evicted for later`
-                );
-              }
-            } catch (err) {
-              console.error(`[${ADDON_NAME}] Error evicting cache:`, err);
+              // eslint-disable-next-line no-console
+              console.log(
+                `[${ADDON_NAME}] User viewing site - cache evicted and refetch triggered`
+              );
+            } else {
+              // eslint-disable-next-line no-console
+              console.log(`[${ADDON_NAME}] User not viewing site - cache evicted for later`);
             }
-          } else {
-            console.error(`[${ADDON_NAME}] Apollo client not found on window`);
+          } catch (err) {
+            console.error(`[${ADDON_NAME}] Error evicting cache:`, err);
           }
+        } else {
+          console.error(`[${ADDON_NAME}] Apollo client not found on window`);
         }
-      );
+      });
       // eslint-disable-next-line no-console
       console.log(`[${ADDON_NAME}] IPC listener registered for CONFIGURED events`);
     } else {

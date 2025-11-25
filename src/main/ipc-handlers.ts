@@ -80,7 +80,10 @@ export function registerIpcHandlers(_context: LocalMain.AddonMainContext): void 
    */
   ipcMain.handle(
     IPC_CHANNELS.SAVE_SETTINGS,
-    async (_event: IpcMainInvokeEvent, data: unknown): Promise<IPCResponse<SettingsData | undefined>> => {
+    async (
+      _event: IpcMainInvokeEvent,
+      data: unknown
+    ): Promise<IPCResponse<SettingsData | undefined>> => {
       try {
         // Validate input data
         if (!isValidSettingsData(data)) {

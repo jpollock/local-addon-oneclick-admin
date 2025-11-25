@@ -243,9 +243,7 @@ export function registerLifecycleHooks(_context: LocalMain.AddonMainContext): vo
     const fullSite = siteData.getSite(siteData_.id) as Site | null;
 
     if (!fullSite) {
-      localLogger.warn(
-        `[${ADDON_NAME}] Could not find site ${siteData_.id} in siteData, skipping`
-      );
+      localLogger.warn(`[${ADDON_NAME}] Could not find site ${siteData_.id} in siteData, skipping`);
       return;
     }
 
