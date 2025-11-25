@@ -31,7 +31,8 @@ npm run build
 # Install symlink to Local's addons directory
 npm run install-addon
 
-# Restart Local
+# Restart Local, then enable the addon:
+# Local > Add-ons > Installed > Auto One-Click Admin > Enable
 ```
 
 ### For Production (manual copy)
@@ -42,6 +43,7 @@ npm run install-addon
    - **Windows**: `%APPDATA%\Local\addons\`
    - **Linux**: `~/.config/Local/addons/`
 3. Restart Local
+4. Enable the addon: **Local > Add-ons > Installed > Auto One-Click Admin > Enable**
 
 ## Uninstallation
 

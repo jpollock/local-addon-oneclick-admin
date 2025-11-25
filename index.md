@@ -28,7 +28,8 @@ npm run build
 # Install to Local
 npm run install-addon
 
-# Restart Local
+# Restart Local, then enable the addon:
+# Local > Add-ons > Installed > Auto One-Click Admin > Enable
 ```
 
 ### Configuration

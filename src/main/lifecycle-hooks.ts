@@ -54,6 +54,22 @@ function parseUserId(idString: string): number | null {
 }
 
 /**
+ * Delays execution for a specified number of milliseconds.
+ *
+ * @param ms - Milliseconds to delay
+ * @returns Promise that resolves after the delay
+ */
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/** Maximum number of retry attempts for WP-CLI */
+const MAX_RETRIES = 3;
+
+/** Initial delay between retries in milliseconds */
+const INITIAL_RETRY_DELAY = 2000;
+
+/**
  * Registers event listeners for automatic one-click admin configuration.
  * Note: We use ipcMain.on('siteAdded') instead of context.hooks because
  * ImporterLocalExport (imports/blueprints) only emits IPC events, not hooks.
@@ -100,32 +116,59 @@ export function registerLifecycleHooks(_context: LocalMain.AddonMainContext): vo
       }
 
       // For new sites, the site is already running when siteAdded fires
-      // Run WP-CLI to get administrator users
+      // Run WP-CLI to get administrator users (with retry for timing issues)
       localLogger.info(`[${ADDON_NAME}] Fetching admin users for "${site.name}"...`);
 
-      let users: WPUser[];
-      try {
-        const result = await wpCli.run(site, [
-          'user',
-          'list',
-          '--role=administrator',
-          '--format=json',
-        ]);
+      let users: WPUser[] | null = null;
+      let lastError: string | null = null;
 
-        if (!result || typeof result !== 'string') {
-          localLogger.warn(`[${ADDON_NAME}] WP-CLI returned empty result`);
-          return;
+      for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+        try {
+          const result = await wpCli.run(site, [
+            'user',
+            'list',
+            '--role=administrator',
+            '--format=json',
+          ]);
+
+          // Log raw result for debugging
+          localLogger.debug(
+            `[${ADDON_NAME}] WP-CLI attempt ${attempt} raw result: ${JSON.stringify(result)}`
+          );
+
+          if (!result || typeof result !== 'string') {
+            lastError = 'WP-CLI returned empty result';
+            localLogger.warn(`[${ADDON_NAME}] Attempt ${attempt}/${MAX_RETRIES}: ${lastError}`);
+          } else {
+            const parsed: unknown = JSON.parse(result);
+            if (!isValidWPUserArray(parsed)) {
+              // Log what we actually got for debugging
+              lastError = `Invalid user data format: ${JSON.stringify(parsed).substring(0, 200)}`;
+              localLogger.warn(`[${ADDON_NAME}] Attempt ${attempt}/${MAX_RETRIES}: ${lastError}`);
+            } else {
+              users = parsed;
+              break; // Success!
+            }
+          }
+        } catch (error: unknown) {
+          lastError = error instanceof Error ? error.message : String(error);
+          localLogger.warn(
+            `[${ADDON_NAME}] Attempt ${attempt}/${MAX_RETRIES} failed: ${lastError}`
+          );
         }
 
-        const parsed: unknown = JSON.parse(result);
-        if (!isValidWPUserArray(parsed)) {
-          localLogger.warn(`[${ADDON_NAME}] WP-CLI returned invalid user data`);
-          return;
+        // Wait before retrying (exponential backoff)
+        if (attempt < MAX_RETRIES) {
+          const delayMs = INITIAL_RETRY_DELAY * attempt;
+          localLogger.info(`[${ADDON_NAME}] Waiting ${delayMs}ms before retry...`);
+          await delay(delayMs);
         }
-        users = parsed;
-      } catch (error: unknown) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        localLogger.error(`[${ADDON_NAME}] Failed to get admin users: ${errorMessage}`);
+      }
+
+      if (!users) {
+        localLogger.error(
+          `[${ADDON_NAME}] Failed to get admin users after ${MAX_RETRIES} attempts. Last error: ${lastError}`
+        );
         return;
       }
 
