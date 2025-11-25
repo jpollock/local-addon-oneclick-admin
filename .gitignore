@@ -1,14 +1,10 @@
 # Dependencies
 node_modules/
 
-# Build output (compiled files at root, not src/lib)
+# Build output (compiled files)
 /lib/
 /dist/
 /build/
-*.js
-*.js.map
-*.d.ts
-*.d.ts.map
 
 # IDE
 .vscode/
@@ -36,3 +32,13 @@ coverage/
 *.tmp
 *.temp
 .cache/
+
+# Jekyll (for GitHub Pages)
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+Gemfile.lock
+
+# Claude Code
+.claude/

@@ -1,16 +1,44 @@
 {
-  "name": "@local/oneclick-admin",
+  "name": "@local-labs/oneclick-admin",
   "productName": "Auto One-Click Admin",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Automatically enables one-click admin for new Local sites",
+  "license": "MIT",
+  "author": "Jeremy Pollock <jpollock911@gmail.com>",
+  "keywords": [
+    "local",
+    "wordpress",
+    "addon",
+    "one-click",
+    "admin"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jpollock/local-addon-oneclick-admin.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jpollock/local-addon-oneclick-admin/issues"
+  },
+  "homepage": "https://github.com/jpollock/local-addon-oneclick-admin#readme",
   "main": "lib/main.js",
   "renderer": "lib/renderer.js",
   "scripts": {
     "build": "npm run clean && npm run compile && npm run create-entry-points",
     "compile": "tsc -p .",
-    "create-entry-points": "echo \"module.exports = require('./main/index').default || require('./main/index');\" > lib/main.js && echo \"module.exports = require('./renderer/index').default || require('./renderer/index');\" > lib/renderer.js",
+    "create-entry-points": "node scripts/create-entry-points.js",
     "clean": "rm -rf lib",
-    "watch": "tsc -p . --watch"
+    "watch": "tsc -p . --watch",
+    "install-addon": "node scripts/install-addon.js",
+    "uninstall-addon": "node scripts/uninstall-addon.js",
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx}\"",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "typecheck": "tsc --noEmit",
+    "prepare": "npm run build"
   },
   "engines": {
     "local": ">=9.0.0"
@@ -22,8 +50,18 @@
   },
   "devDependencies": {
     "@getflywheel/local": "^6.0.0",
+    "@types/jest": "^29.5.0",
     "@types/node": "^20.10.0",
     "@types/react": "^18.2.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.33.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.2.0",
+    "ts-jest": "^29.1.0",
     "typescript": "^5.3.0"
   }
 }

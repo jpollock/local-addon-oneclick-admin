@@ -4,6 +4,53 @@
 
 Auto One-Click Admin saves you time by automatically configuring one-click admin access for every new WordPress site you create in Local. Instead of manually selecting an admin user for one-click login, the addon does it for you.
 
+## Installation
+
+### For Development (with symlink)
+
+If you're developing or testing the addon:
+
+```bash
+# Clone the repository
+git clone https://github.com/jpollock/local-addon-oneclick-admin.git
+cd local-addon-oneclick-admin
+
+# Install dependencies and build
+npm install
+npm run build
+
+# Install symlink to Local's addons directory
+npm run install-addon
+
+# Restart Local
+```
+
+### For Production (manual copy)
+
+1. Download the latest release from GitHub
+2. Copy the `local-addon-oneclick-admin` folder to your Local addons directory:
+   - **macOS**: `~/Library/Application Support/Local/addons/`
+   - **Windows**: `%APPDATA%\Local\addons\`
+   - **Linux**: `~/.config/Local/addons/`
+3. Restart Local
+
+## Uninstallation
+
+### If installed via npm script
+
+```bash
+cd local-addon-oneclick-admin
+npm run uninstall-addon
+```
+
+Then restart Local.
+
+### If installed manually
+
+1. Navigate to your Local addons directory (see paths above)
+2. Delete the `local-addon-oneclick-admin` folder
+3. Restart Local
+
 ## How It Works
 
 When you create, import, or clone a site in Local:
