@@ -40,6 +40,59 @@ interface WindowWithElectron extends Window {
 }
 
 /**
+ * Theme-aware color palette.
+ */
+interface ThemeColors {
+  panelBg: string;
+  textPrimary: string;
+  textSecondary: string;
+  cardBg: string;
+  infoBg: string;
+  infoBorder: string;
+  infoText: string;
+  warningBg: string;
+  warningBorder: string;
+  warningText: string;
+}
+
+/**
+ * Gets theme-appropriate colors based on current Local theme.
+ *
+ * @returns Color palette for current theme
+ */
+function getThemeColors(): ThemeColors {
+  const isDark = document.documentElement.classList.contains('Theme__Dark');
+
+  if (isDark) {
+    return {
+      panelBg: '#2d2d2d',
+      textPrimary: '#e0e0e0',
+      textSecondary: '#a0a0a0',
+      cardBg: '#3d3d3d',
+      infoBg: '#1e3a5f',
+      infoBorder: '#2d5a8a',
+      infoText: '#a0c4e8',
+      warningBg: '#5f4a1e',
+      warningBorder: '#8a6d2d',
+      warningText: '#e8d4a0',
+    };
+  }
+
+  return {
+    panelBg: '#f5f5f5',
+    textPrimary: '#333333',
+    textSecondary: '#666666',
+    cardBg: '#ffffff',
+    infoBg: '#e7f3ff',
+    infoBorder: '#b3d7ff',
+    infoText: '#1a4d7c',
+    warningBg: '#fff3cd',
+    warningBorder: '#ffc107',
+    warningText: '#856404',
+  };
+}
+
+/**
  * Gets electron API from context or window.
  *
  * @param context - Component context
@@ -156,12 +209,13 @@ export class PreferencesPanel extends BaseComponent<PreferencesPanelProps, Prefe
   render(): React.ReactElement {
     const { React: ReactLib } = this.props.context;
     const { enabled, loading, error } = this.state;
+    const colors = getThemeColors();
 
     if (loading) {
       return ReactLib.createElement(
         'div',
         {
-          style: { padding: '20px', textAlign: 'center' as const },
+          style: { padding: '20px', textAlign: 'center' as const, color: colors.textPrimary },
         },
         'Loading settings...'
       );
@@ -173,7 +227,7 @@ export class PreferencesPanel extends BaseComponent<PreferencesPanelProps, Prefe
         className: 'oneclick-admin-preferences',
         style: {
           padding: '20px',
-          backgroundColor: '#f5f5f5',
+          backgroundColor: colors.panelBg,
           borderRadius: '8px',
           margin: '20px 0',
         },
@@ -182,7 +236,7 @@ export class PreferencesPanel extends BaseComponent<PreferencesPanelProps, Prefe
       ReactLib.createElement(
         'h3',
         {
-          style: { marginTop: 0, marginBottom: '20px' },
+          style: { marginTop: 0, marginBottom: '20px', color: colors.textPrimary },
         },
         'Auto One-Click Admin Settings'
       ),
@@ -191,7 +245,7 @@ export class PreferencesPanel extends BaseComponent<PreferencesPanelProps, Prefe
       ReactLib.createElement(
         'p',
         {
-          style: { marginBottom: '20px', color: '#666' },
+          style: { marginBottom: '20px', color: colors.textSecondary },
         },
         'When enabled, this addon automatically configures one-click admin ' +
           'for all new sites using the first administrator user.'
@@ -204,11 +258,11 @@ export class PreferencesPanel extends BaseComponent<PreferencesPanelProps, Prefe
           {
             style: {
               padding: '10px 15px',
-              backgroundColor: '#fff3cd',
-              border: '1px solid #ffc107',
+              backgroundColor: colors.warningBg,
+              border: `1px solid ${colors.warningBorder}`,
               borderRadius: '4px',
               marginBottom: '20px',
-              color: '#856404',
+              color: colors.warningText,
             },
           },
           error
@@ -218,7 +272,7 @@ export class PreferencesPanel extends BaseComponent<PreferencesPanelProps, Prefe
       ReactLib.createElement(
         'div',
         {
-          style: { backgroundColor: 'white', padding: '20px', borderRadius: '4px' },
+          style: { backgroundColor: colors.cardBg, padding: '20px', borderRadius: '4px' },
         },
         // Enable toggle
         ReactLib.createElement(
@@ -229,6 +283,7 @@ export class PreferencesPanel extends BaseComponent<PreferencesPanelProps, Prefe
               alignItems: 'center',
               cursor: 'pointer',
               userSelect: 'none' as const,
+              color: colors.textPrimary,
             },
           },
           ReactLib.createElement('input', {
@@ -255,7 +310,7 @@ export class PreferencesPanel extends BaseComponent<PreferencesPanelProps, Prefe
               marginBottom: 0,
               marginLeft: '30px',
               fontSize: '13px',
-              color: '#888',
+              color: colors.textSecondary,
             },
           },
           'Applies to newly created, imported, and cloned sites. ' +
@@ -270,10 +325,11 @@ export class PreferencesPanel extends BaseComponent<PreferencesPanelProps, Prefe
           style: {
             marginTop: '20px',
             padding: '15px',
-            backgroundColor: '#e7f3ff',
-            border: '1px solid #b3d7ff',
+            backgroundColor: colors.infoBg,
+            border: `1px solid ${colors.infoBorder}`,
             borderRadius: '4px',
             fontSize: '13px',
+            color: colors.infoText,
           },
         },
         ReactLib.createElement('strong', null, 'How it works: '),
