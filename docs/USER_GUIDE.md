@@ -8,9 +8,22 @@ Auto One-Click Admin saves you time by automatically configuring one-click admin
 
 ## Installation
 
-### For Development (with symlink)
+### Method 1: Pre-built Release (Recommended)
 
-If you're developing or testing the addon:
+The easiest way to install the addon.
+
+1. Go to the [Releases page](https://github.com/jpollock/local-addon-oneclick-admin/releases)
+2. Download the `.tgz` file from the latest release (e.g., `local-labs-local-addon-oneclick-admin-0.1.0.tgz`)
+3. Open **Local**
+4. Go to **Add-ons** (in the left sidebar)
+5. Click **Install from disk** (top right)
+6. Select the `.tgz` file you downloaded
+7. Toggle the addon **ON** to enable
+8. Click **Relaunch** when prompted
+
+### Method 2: Build from Source
+
+For developers or contributors:
 
 ```bash
 # Clone the repository
@@ -28,19 +41,18 @@ npm run install-addon
 # Local > Add-ons > Installed > Auto One-Click Admin > Enable
 ```
 
-### For Production (manual copy)
-
-1. Download the latest release from GitHub
-2. Copy the `local-addon-oneclick-admin` folder to your Local addons directory:
-   - **macOS**: `~/Library/Application Support/Local/addons/`
-   - **Windows**: `%APPDATA%\Local\addons\`
-   - **Linux**: `~/.config/Local/addons/`
-3. Restart Local
-4. Enable the addon: **Local > Add-ons > Installed > Auto One-Click Admin > Enable**
-
 ## Uninstallation
 
-### If installed via npm script
+### If installed from disk (Method 1)
+
+1. Open **Local**
+2. Go to **Add-ons** (in the left sidebar)
+3. Find **Auto One-Click Admin**
+4. Toggle it **OFF**
+5. Click the **trash icon** or **Remove** button
+6. Restart Local
+
+### If installed via npm script (Method 2)
 
 ```bash
 cd local-addon-oneclick-admin
@@ -48,12 +60,6 @@ npm run uninstall-addon
 ```
 
 Then restart Local.
-
-### If installed manually
-
-1. Navigate to your Local addons directory (see paths above)
-2. Delete the `local-addon-oneclick-admin` folder
-3. Restart Local
 
 ## How It Works
 

@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tag-triggered GitHub release workflow
 - CHANGELOG.md for version tracking
 
+### Changed
+- Updated installation docs to prioritize "Install from disk" method
+
 ## [0.1.0] - 2025-12-05
 
 ### Added
