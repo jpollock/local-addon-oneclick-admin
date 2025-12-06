@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tag-triggered GitHub release workflow
 - CHANGELOG.md for version tracking
 
+### Fixed
+- Preferences panel now readable in dark mode (issue #1)
+
 ### Changed
 - Updated installation docs to prioritize "Install from disk" method
 
